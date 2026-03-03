@@ -1,108 +1,625 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Peixi Xiong</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet" />
   <style>
-    body { max-width: 980px; margin: 40px auto; padding: 0 16px; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; line-height: 1.5; }
-    header { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; align-items: baseline; }
-    nav a { margin-right: 12px; text-decoration: none; }
-    .pillars { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    .card { border: 1px solid #ddd; border-radius: 12px; padding: 16px; }
-    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-    .thumb { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 10px; border: 1px solid #eee; }
-    @media (max-width: 720px) { .pillars { grid-template-columns: 1fr; } .grid { grid-template-columns: repeat(2, 1fr); } }
+    :root {
+      --fg: #1a1a1a;
+      --fg-muted: #5a5a5a;
+      --fg-light: #8a8a8a;
+      --bg: #faf9f7;
+      --bg-card: #ffffff;
+      --accent: #2d4a3e;
+      --accent-warm: #8b6f4e;
+      --border: #e8e4df;
+      --border-light: #f0ece7;
+      --serif: 'Source Serif 4', Georgia, serif;
+      --sans: 'Source Sans 3', system-ui, -apple-system, sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--sans); font-size: 16px; line-height: 1.7;
+      color: var(--fg); background: var(--bg); -webkit-font-smoothing: antialiased;
+    }
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(250,249,247,0.92);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-light);
+    }
+    .nav-inner {
+      max-width: 1080px; margin: 0 auto; padding: 14px 24px;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 8px;
+    }
+    .nav-brand {
+      font-family: var(--serif); font-size: 18px; font-weight: 700;
+      color: var(--fg); text-decoration: none; letter-spacing: 0.01em;
+    }
+    .nav-links { display: flex; gap: 6px; flex-wrap: wrap; }
+    .nav-links a {
+      font-size: 13px; font-weight: 600; letter-spacing: 0.05em;
+      text-transform: uppercase; text-decoration: none;
+      color: var(--fg-muted); padding: 4px 10px; border-radius: 4px;
+      transition: color 0.2s, background 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); background: rgba(45,74,62,0.06); }
+    .container { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+    section { padding: 56px 0; }
+    section + section { border-top: 1px solid var(--border-light); }
+
+    /* HERO */
+    .hero { padding: 72px 0 56px; }
+    .hero-grid { display: flex; gap: 40px; align-items: center; }
+    .hero-photo {
+      flex-shrink: 0; width: 180px; height: 180px;
+      border-radius: 50%; object-fit: cover;
+      border: 4px solid var(--border); box-shadow: 0 8px 28px rgba(0,0,0,0.08);
+    }
+    .hero-text { flex: 1; }
+    .hero-text h1 {
+      font-family: var(--serif); font-size: clamp(32px, 4.5vw, 48px);
+      font-weight: 700; line-height: 1.15; color: var(--fg); letter-spacing: -0.01em;
+    }
+    .hero-text .tagline {
+      font-family: var(--serif); font-size: clamp(16px, 2vw, 19px);
+      font-weight: 400; font-style: italic; color: var(--fg-muted); margin-top: 8px;
+    }
+    .hero-text .hero-bio {
+      font-size: 15px; color: var(--fg-muted); margin-top: 14px;
+      max-width: 560px; line-height: 1.65;
+    }
+    .hero-links {
+      margin-top: 22px; display: flex; gap: 10px; flex-wrap: wrap;
+    }
+    .hero-links a {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 13px; font-weight: 600; letter-spacing: 0.04em;
+      text-transform: uppercase; text-decoration: none;
+      color: var(--bg); background: var(--accent);
+      padding: 9px 18px; border-radius: 6px;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .hero-links a:hover { background: #1e362d; transform: translateY(-1px); }
+    .hero-links a.outline {
+      color: var(--accent); background: transparent; border: 1.5px solid var(--accent);
+    }
+    .hero-links a.outline:hover { background: rgba(45,74,62,0.06); }
+
+    /* PILLARS */
+    .pillars { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .pillar {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 14px; padding: 36px 32px;
+      transition: box-shadow 0.25s, transform 0.2s;
+    }
+    .pillar:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.06); transform: translateY(-2px); }
+    .pillar h2 {
+      font-family: var(--serif); font-size: 24px;
+      font-weight: 700; line-height: 1.25; margin-bottom: 16px;
+      color: var(--accent);
+    }
+    .pillar p, .pillar li { font-size: 15px; color: var(--fg-muted); line-height: 1.65; }
+    .pillar ul { list-style: none; padding: 0; }
+    .pillar ul li { padding: 4px 0 4px 18px; position: relative; }
+    .pillar ul li::before {
+      content: ''; position: absolute; left: 0; top: 13px;
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent); opacity: 0.5;
+    }
+
+    /* SECTION HEADERS */
+    .section-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 6px;
+    }
+    .section-title {
+      font-family: var(--serif); font-size: clamp(24px, 3.2vw, 32px);
+      font-weight: 700; line-height: 1.2; margin-bottom: 8px;
+    }
+    .section-desc {
+      font-size: 15.5px; color: var(--fg-muted); max-width: 680px; margin-bottom: 32px;
+      line-height: 1.7;
+    }
+
+    /* INTERESTS */
+    .interests { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+    .interest-tag {
+      font-size: 13px; font-weight: 600; letter-spacing: 0.03em;
+      color: var(--accent); background: rgba(45,74,62,0.08);
+      padding: 6px 16px; border-radius: 20px;
+    }
+
+    /* PUBLICATIONS */
+    .pub-list { list-style: none; padding: 0; }
+    .pub-item { padding: 20px 0; border-bottom: 1px solid var(--border-light); }
+    .pub-item:last-child { border-bottom: none; }
+    .pub-venue {
+      font-family: var(--sans);
+      font-size: 12px; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--accent-warm); margin-bottom: 4px;
+    }
+    .pub-venue .oral-badge {
+      display: inline-block; background: #c0392b; color: #fff;
+      font-size: 10px; font-weight: 700; letter-spacing: 0.06em;
+      padding: 2px 8px; border-radius: 3px; margin-left: 8px; vertical-align: middle;
+    }
+    .pub-venue .journal-badge {
+      display: inline-block; background: var(--accent); color: #fff;
+      font-size: 10px; font-weight: 700; letter-spacing: 0.06em;
+      padding: 2px 8px; border-radius: 3px; margin-left: 8px; vertical-align: middle;
+    }
+    .pub-title {
+      font-family: var(--serif); font-size: 18px;
+      font-weight: 600; line-height: 1.4; margin-bottom: 4px;
+    }
+    .pub-title a { color: var(--fg); text-decoration: none; transition: color 0.2s; }
+    .pub-title a:hover { color: var(--accent); }
+    .pub-authors { font-size: 14px; color: var(--fg-muted); }
+    .pub-authors strong { color: var(--fg); font-weight: 600; }
+    .pub-cited { font-size: 12px; color: var(--fg-light); margin-top: 3px; }
+    .toggle-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      margin-top: 24px; font-size: 14px; font-weight: 600;
+      color: var(--accent); background: none;
+      border: 1.5px solid var(--accent);
+      padding: 8px 20px; border-radius: 6px;
+      cursor: pointer; transition: background 0.2s;
+    }
+    .toggle-btn:hover { background: rgba(45,74,62,0.06); }
+    .hidden { display: none; }
+
+    /* PATENTS */
+    .patent-item { padding: 16px 0; border-bottom: 1px solid var(--border-light); }
+    .patent-item:last-child { border-bottom: none; }
+    .patent-title {
+      font-family: var(--serif); font-size: 17px;
+      font-weight: 600; line-height: 1.35; margin-bottom: 2px;
+    }
+    .patent-id { font-size: 13px; color: var(--fg-light); }
+
+    /* SERVICE */
+    .service-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 24px;
+    }
+    .service-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 10px; padding: 28px 24px;
+    }
+    .service-card h4 {
+      font-family: var(--serif); font-size: 17px;
+      font-weight: 700; margin-bottom: 12px; color: var(--fg);
+    }
+    .service-card ul { list-style: none; padding: 0; }
+    .service-card ul li {
+      font-size: 14px; color: var(--fg-muted); padding: 3px 0;
+      padding-left: 16px; position: relative;
+    }
+    .service-card ul li::before {
+      content: ''; position: absolute; left: 0; top: 11px;
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--accent-warm); opacity: 0.6;
+    }
+
+    /* PHOTOGRAPHY */
+    .photo-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 16px; margin-top: 28px;
+    }
+    .photo-card {
+      position: relative; aspect-ratio: 1;
+      border-radius: 12px; overflow: hidden;
+      background: #e8e4df; border: 1px solid var(--border);
+      transition: transform 0.25s, box-shadow 0.25s;
+    }
+    .photo-card:hover { transform: translateY(-3px); box-shadow: 0 12px 36px rgba(0,0,0,0.1); }
+    .photo-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .photo-card .overlay {
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,0.35); opacity: 0;
+      transition: opacity 0.25s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .photo-card:hover .overlay { opacity: 1; }
+    .overlay span {
+      font-size: 12px; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase; color: #fff;
+    }
+    .gear-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px; margin-top: 28px;
+    }
+    .gear-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 10px; padding: 24px;
+    }
+    .gear-card h4 {
+      font-family: var(--serif); font-size: 16px;
+      font-weight: 700; margin-bottom: 10px; color: var(--fg);
+    }
+    .gear-card ul { list-style: none; padding: 0; }
+    .gear-card ul li { font-size: 14px; color: var(--fg-muted); padding: 3px 0; }
+    .contact-row { display: flex; gap: 32px; flex-wrap: wrap; align-items: center; }
+    .contact-item { font-size: 15px; color: var(--fg-muted); }
+    .contact-item a { color: var(--accent); text-decoration: none; font-weight: 600; }
+    .contact-item a:hover { text-decoration: underline; }
+    footer {
+      border-top: 1px solid var(--border-light); padding: 28px 0;
+      text-align: center; font-size: 13px; color: var(--fg-light);
+    }
+    @media (max-width: 720px) {
+      .hero-grid { flex-direction: column; text-align: center; }
+      .hero-links { justify-content: center; }
+      .pillars { grid-template-columns: 1fr; }
+      .photo-grid { grid-template-columns: repeat(2, 1fr); }
+      .service-grid { grid-template-columns: 1fr; }
+      .hero { padding: 48px 0 36px; }
+      section { padding: 40px 0; }
+      .pillar { padding: 28px 20px; }
+      .nav-links a { font-size: 11px; padding: 3px 6px; }
+      .gear-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 480px) {
+      .photo-grid { grid-template-columns: 1fr 1fr; }
+      .gear-grid { grid-template-columns: 1fr; }
+      .hero-photo { width: 140px; height: 140px; }
+    }
   </style>
 </head>
 <body>
 
-<header>
-  <div>
-    <h1 style="margin:0;">Peixi Xiong</h1>
-    <p style="margin:6px 0 0 0;">Senior AI Research Scientist and Film Photographer</p>
+<nav>
+  <div class="nav-inner">
+    <a class="nav-brand" href="#top">Peixi Xiong</a>
+    <div class="nav-links">
+      <a href="#top">Home</a>
+      <a href="#research">Research</a>
+      <a href="#publications">Publications</a>
+      <a href="#patents">Patents</a>
+      <a href="#service">Service</a>
+      <a href="#photography">Analog Photography</a>
+      <a href="#contact">Contact</a>
+    </div>
   </div>
-  <nav>
-    <a href="#research">Research</a>
-    <a href="#publications">Publications</a>
-    <a href="#patents">Patents</a>
-    <a href="#photography">Photography</a>
-    <a href="#contact">Contact</a>
-  </nav>
-</header>
+</nav>
 
-<section style="margin-top:18px;">
-  <p>
-    Multimodal learning, structured reasoning, and foundation model applications.
-    Also focused on analog film photography and visual storytelling.
-  </p>
-  <p>
-    <a href="YOUR_SCHOLAR_LINK">Google Scholar</a>
-    <a href="YOUR_LINKEDIN_LINK" style="margin-left:10px;">LinkedIn</a>
-    <a href="YOUR_INSTAGRAM_LINK" style="margin-left:10px;">Instagram</a>
-    <a href="YOUR_CV_PDF_LINK" style="margin-left:10px;">CV</a>
-  </p>
-</section>
+<div class="container">
 
-<section class="pillars">
-  <div class="card">
-    <h2 id="research" style="margin-top:0;">Research</h2>
-    <ul>
-      <li>Multimodal Learning</li>
-      <li>Retrieval Augmented Generation</li>
-      <li>Visual Reasoning and Structured Understanding</li>
+  <!-- HERO -->
+  <section class="hero" id="top">
+    <div class="hero-grid">
+      <img class="hero-photo" src="assets/peixi.png" alt="Peixi Xiong" />
+      <div class="hero-text">
+        <h1>Peixi Xiong</h1>
+        <p class="tagline">Senior AI Research Scientist &amp; Analog Film Photographer</p>
+        <p class="hero-bio">
+          Ph.D. in Computer Vision from Northwestern University. Currently at Intel Labs, working on multimodal learning, structured reasoning, and foundation model applications. Also an analog film photographer shooting medium format landscapes.
+        </p>
+        <div class="hero-links">
+          <a href="https://scholar.google.com/citations?user=IbqmMp8AAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar</a>
+          <a href="https://www.linkedin.com/in/peixi-xiong" target="_blank" rel="noopener" class="outline">LinkedIn</a>
+          <a href="https://www.instagram.com/pixel_xiong/" target="_blank" rel="noopener" class="outline">Instagram</a>
+          <a href="assets/Peixi_CV.pdf" target="_blank" rel="noopener" class="outline">CV</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PILLARS -->
+  <section>
+    <div class="pillars">
+      <div class="pillar">
+        <h2>Research &amp; Academic</h2>
+        <p>Focused on multimodal learning, structured reasoning, and foundation model applications, including Retrieval-Augmented Generation and agentic AI systems.</p>
+        <ul style="margin-top: 16px;">
+          <li>Published at CVPR, ECCV, EMNLP, ICLR, AAAI, ICCV, and WACV</li>
+          <li>Multiple U.S. patents in visual reasoning, RAG, and generative AI</li>
+          <li>Editorial Advisory Board Member, <em>Information Processing &amp; Management</em> (Elsevier)</li>
+        </ul>
+      </div>
+      <div class="pillar">
+        <h2>Analog Film Photography</h2>
+        <p>Landscape-focused analog photography with ongoing collaborations with film brands, labs, manufacturers, and community features.</p>
+        <ul style="margin-top: 16px;">
+          <li>Medium format and 35mm analog film work</li>
+          <li>Self-developed C-41, E-6, and ECN-2 film processes</li>
+          <li>Collaborations with film brands, labs, manufacturers, and community features</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESEARCH -->
+  <section id="research">
+    <div class="section-label">Research</div>
+    <h2 class="section-title">Research Summary</h2>
+    <p class="section-desc">
+      My research sits at the intersection of computer vision and natural language processing. I work on multimodal learning, structured visual reasoning, and foundation model applications &mdash; including Retrieval-Augmented Generation (RAG) and agentic AI systems. Currently a Senior AI Research Scientist at Intel Labs.
+    </p>
+    <div class="section-label" style="margin-top: 12px;">Research Interests</div>
+    <div class="interests">
+      <span class="interest-tag">Agentic AI</span>
+      <span class="interest-tag">Structured Reasoning</span>
+      <span class="interest-tag">Multimodal Learning</span>
+      <span class="interest-tag">Visual Question Answering</span>
+      <span class="interest-tag">Computer Vision</span>
+      <span class="interest-tag">Retrieval-Augmented Generation</span>
+    </div>
+  </section>
+
+  <!-- PUBLICATIONS -->
+  <section id="publications">
+    <div class="section-label">Publications</div>
+    <h2 class="section-title">Selected Publications</h2>
+    <p class="section-desc">A selection of recent and representative work. Click below to see the full list.</p>
+
+    <ul class="pub-list">
+      <li class="pub-item">
+        <div class="pub-venue">WACV 2026</div>
+        <div class="pub-title">Modeling and Learning Multiple Hypotheses for Monocular 3D Object Detection</div>
+        <div class="pub-authors">Hyeonjeong Park, <strong>Peixi Xiong</strong>, Pei Yu, Wei Tang</div>
+      </li>
+      <li class="pub-item">
+        <div class="pub-venue">CVPR 2025</div>
+        <div class="pub-title"><a href="https://openaccess.thecvf.com/content/CVPR2025/html/Ruan_Learning_Partonomic_3D_Reconstruction_from_Image_Collections_CVPR_2025_paper.html" target="_blank" rel="noopener">Learning Partonomic 3D Reconstruction from Image Collections</a></div>
+        <div class="pub-authors">Xiaoqian Ruan, Pei Yu, Dian Jia, Hyeonjeong Park, <strong>Peixi Xiong</strong>, Wei Tang</div>
+      </li>
+      <li class="pub-item">
+        <div class="pub-venue">AAAI 2025</div>
+        <div class="pub-title">Dask: Distribution Rehearsing via Adaptive Style Kernel Learning for Exemplar-Free Lifelong Person Re-Identification</div>
+        <div class="pub-authors">Kunlun Xu, Chenghao Jiang, <strong>Peixi Xiong</strong>, Yuxin Peng, Jiahuan Zhou</div>
+        <div class="pub-cited">Cited by 24</div>
+      </li>
+      <li class="pub-item">
+        <div class="pub-venue">ICLR 2025 &middot; SCOPE Workshop</div>
+        <div class="pub-title"><a href="https://scope-workshop.github.io/accepted_paper.html" target="_blank" rel="noopener">Context Is All You Need: Efficient Retrieval Augmented Generation for Domain Specific AI</a></div>
+        <div class="pub-authors"><strong>Peixi Xiong</strong>, Chaunte W. Lacewell, Sameh Gobriel, Nilesh Jain</div>
+      </li>
+      <li class="pub-item">
+        <div class="pub-venue">ECCV 2024</div>
+        <div class="pub-title"><a href="https://link.springer.com/10.1007/978-3-031-72652-1_19" target="_blank" rel="noopener">Textual-Visual Logic Challenge: Understanding and Reasoning in Text-to-Image Generation</a></div>
+        <div class="pub-authors"><strong>Peixi Xiong</strong>, Michael Kozuch, Nilesh Jain</div>
+        <div class="pub-cited">Cited by 4</div>
+      </li>
+      <li class="pub-item">
+        <div class="pub-venue">EMNLP 2024 &middot; Findings</div>
+        <div class="pub-title"><a href="https://2024.emnlp.org/program/accepted_findings/" target="_blank" rel="noopener">Learning to Ask Denotative and Connotative Questions for Knowledge-based VQA</a></div>
+        <div class="pub-authors">Xiaoying Xing, <strong>Peixi Xiong</strong>, Lei Fan, Yunxuan Li, Ying Wu</div>
+        <div class="pub-cited">Cited by 3</div>
+      </li>
+      <li class="pub-item">
+        <div class="pub-venue">Neurocomputing 2022 <span class="journal-badge">Journal</span></div>
+        <div class="pub-title">Visual Question Answering by Pattern Matching and Reasoning</div>
+        <div class="pub-authors">Huayi Zhan, <strong>Peixi Xiong</strong>, Xin Wang, Xin Wang, Lan Yang</div>
+        <div class="pub-cited">Cited by 22</div>
+      </li>
+      <li class="pub-item">
+        <div class="pub-venue">CVPR 2020 <span class="oral-badge">Oral</span></div>
+        <div class="pub-title"><a href="https://openaccess.thecvf.com/content_CVPR_2020/html/Xiong_TA-Student_VQA_Multi-Agents_Training_by_Self-Questioning_CVPR_2020_paper.html" target="_blank" rel="noopener">TA-Student VQA: Multi-Agents Training by Self-Questioning</a></div>
+        <div class="pub-authors"><strong>Peixi Xiong</strong>, Ying Wu</div>
+        <div class="pub-cited">Cited by 10</div>
+      </li>
+      <li class="pub-item">
+        <div class="pub-venue">CVPR 2019</div>
+        <div class="pub-title"><a href="https://openaccess.thecvf.com/content_CVPR_2019/html/Xiong_Visual_Query_Answering_by_Entity-Attribute_Graph_Matching_and_Reasoning_CVPR_2019_paper.html" target="_blank" rel="noopener">Visual Query Answering by Entity-Attribute Graph Matching and Reasoning</a></div>
+        <div class="pub-authors"><strong>Peixi Xiong</strong>, Huayi Zhan, Xin Wang, Baivab Sinha, Ying Wu</div>
+        <div class="pub-cited">Cited by 26</div>
+      </li>
     </ul>
-  </div>
 
-  <div class="card">
-    <h2 id="photography" style="margin-top:0;">Film Photography</h2>
-    <ul>
-      <li>Analog film, medium format, and cinematic color</li>
-      <li>Selected collaborations and community features</li>
-      <li>Portfolio highlights linked to Instagram posts</li>
+    <button class="toggle-btn" onclick="togglePubs()">
+      <span id="pub-toggle-text">Show Full Publication List</span>
+    </button>
+
+    <ul class="pub-list hidden" id="full-pubs">
+      <li class="pub-item">
+        <div class="pub-venue">arXiv 2022</div>
+        <div class="pub-title"><a href="https://arxiv.org/abs/2201.10654" target="_blank" rel="noopener">SA-VQA: Structured Alignment of Visual and Semantic Representations for Visual Question Answering</a></div>
+        <div class="pub-authors"><strong>Peixi Xiong</strong>, Quanzeng You, Pei Yu, Zicheng Liu, Ying Wu</div>
+        <div class="pub-cited">Cited by 14</div>
+      </li>
+      <li class="pub-item">
+        <div class="pub-venue">arXiv 2022</div>
+        <div class="pub-title"><a href="https://arxiv.org/abs/2201.10656" target="_blank" rel="noopener">MGA-VQA: Multi-Granularity Alignment for Visual Question Answering</a></div>
+        <div class="pub-authors"><strong>Peixi Xiong</strong>, Yilin Shen, Hongxia Jin</div>
+        <div class="pub-cited">Cited by 16</div>
+      </li>
+      <li class="pub-item">
+        <div class="pub-venue">ITSC 2022</div>
+        <div class="pub-title">Towards Better Driver Safety: Empowering Personal Navigation Technologies with Road Safety Awareness</div>
+        <div class="pub-authors">Runsheng Xu, Shibo Zhang, <strong>Peixi Xiong</strong>, Allen Yilun Lin, Jiaqi Ma</div>
+        <div class="pub-cited">Cited by 4</div>
+      </li>
+      <li class="pub-item">
+        <div class="pub-venue">ICCV 2021</div>
+        <div class="pub-title">FLAR: A Unified Prototype Framework for Few-Sample Lifelong Active Recognition</div>
+        <div class="pub-authors">Lei Fan, <strong>Peixi Xiong</strong>, Wei Wei, Ying Wu</div>
+        <div class="pub-cited">Cited by 12</div>
+      </li>
+      <li class="pub-item">
+        <div class="pub-venue">ISVC 2019 <span class="oral-badge">Oral</span></div>
+        <div class="pub-title">Adaptive Attention Model for LiDAR Instance Segmentation</div>
+        <div class="pub-authors"><strong>Peixi Xiong</strong>, Xuetao Hao, Yunming Shao, Jerry Yu</div>
+        <div class="pub-cited">Cited by 4</div>
+      </li>
+      <li class="pub-item">
+        <div class="pub-venue">Ph.D. Dissertation &middot; Northwestern University 2022</div>
+        <div class="pub-title">Better Reasoning for Visual Question Answering</div>
+        <div class="pub-authors"><strong>Peixi Xiong</strong></div>
+      </li>
     </ul>
-  </div>
-</section>
+  </section>
 
-<section style="margin-top:28px;">
-  <h2 id="publications">Selected Publications</h2>
-  <ul>
-    <li>ECCV 2024: Textual Visual Logic Challenge. <a href="LINK">Paper</a></li>
-    <li>EMNLP 2024: Learning to Ask Denotative and Connotative Questions. <a href="LINK">Paper</a></li>
-    <li>CVPR 2025: Learning Partonomic 3D Reconstruction from Image Collections. <a href="LINK">Paper</a></li>
-  </ul>
-  <p><a href="publications.html">Full list</a></p>
-</section>
+  <!-- PATENTS -->
+  <section id="patents">
+    <div class="section-label">Intellectual Property</div>
+    <h2 class="section-title">Patents</h2>
+    <p class="section-desc">U.S. patents in visual reasoning, retrieval-augmented generation, and generative AI.</p>
+    <div class="pub-list">
+      <div class="patent-item">
+        <div class="patent-title">Retrieval-Augmented Generation for Domain-Specific Technical Documents</div>
+        <div class="patent-id">US Patent App. 19/340,352 &middot; 2026</div>
+      </div>
+      <div class="patent-item">
+        <div class="patent-title">Multi-Modality Reinforcement Learning in Logic-Rich Scene Generation</div>
+        <div class="patent-id">US Patent App. 19/229,127 &middot; 2025</div>
+      </div>
+      <div class="patent-item">
+        <div class="patent-title">Multi-Granularity Alignment for Visual Question Answering</div>
+        <div class="patent-id">US Patent 12,210,835 &middot; 2025</div>
+      </div>
+      <div class="patent-item">
+        <div class="patent-title">Network for Structure-Based Text-to-Image Generation</div>
+        <div class="patent-id">US Patent App. 18/400,561 &middot; 2024</div>
+      </div>
+      <div class="patent-item">
+        <div class="patent-title">Semantic-Guided Transformer for Object Recognition and Radiance Field-Based Novel View</div>
+        <div class="patent-id">US Patent App. 18/475,353 &middot; 2024</div>
+      </div>
+    </div>
+  </section>
 
-<section style="margin-top:28px;">
-  <h2 id="patents">Patents</h2>
-  <ul>
-    <li>Retrieval Augmented Generation for Domain Specific Technical Documents. <a href="LINK">Details</a></li>
-    <li>Multi Granularity Alignment for Visual Question Answering. <a href="LINK">Details</a></li>
-  </ul>
-</section>
+  <!-- SERVICE -->
+  <section id="service">
+    <div class="section-label">Professional Activities</div>
+    <h2 class="section-title">Academic Service</h2>
+    <div class="service-grid">
+      <div class="service-card">
+        <h4>Editorial Board</h4>
+        <ul>
+          <li><strong>Editorial Advisory Board Member</strong>, <em>Information Processing &amp; Management</em> (Elsevier)</li>
+        </ul>
+      </div>
+      <div class="service-card">
+        <h4>Invited Reviewer</h4>
+        <ul>
+          <li>CVPR, ICCV, ECCV</li>
+          <li>NeurIPS, ICLR, AAAI, WACV</li>
+          <li>T-PAMI, IJCV</li>
+        </ul>
+      </div>
+      <div class="service-card">
+        <h4>Invited Speaker</h4>
+        <ul>
+          <li>AIM-2024</li>
+          <li>AIM-2025</li>
+        </ul>
+      </div>
+      <div class="service-card">
+        <h4>Education</h4>
+        <ul>
+          <li><strong>Ph.D.</strong> Computer Vision, Northwestern University</li>
+          <li><strong>M.S.</strong> Electrical Engineering, Northwestern University</li>
+          <li><strong>B.Eng.</strong> Electronic Engineering, University of Manchester</li>
+        </ul>
+      </div>
+    </div>
+  </section>
 
-<section style="margin-top:28px;">
-  <h2>Photography Highlights</h2>
-  <div class="grid">
-    <a href="IG_POST_LINK_1"><img class="thumb" src="assets/ig_1.jpg" alt="work 1" /></a>
-    <a href="IG_POST_LINK_2"><img class="thumb" src="assets/ig_2.jpg" alt="work 2" /></a>
-    <a href="IG_POST_LINK_3"><img class="thumb" src="assets/ig_3.jpg" alt="work 3" /></a>
-    <a href="IG_POST_LINK_4"><img class="thumb" src="assets/ig_4.jpg" alt="work 4" /></a>
-    <a href="IG_POST_LINK_5"><img class="thumb" src="assets/ig_5.jpg" alt="work 5" /></a>
-    <a href="IG_POST_LINK_6"><img class="thumb" src="assets/ig_6.jpg" alt="work 6" /></a>
-  </div>
-  <p style="margin-top:10px;"><a href="YOUR_INSTAGRAM_LINK">More on Instagram</a></p>
-</section>
+  <!-- PHOTOGRAPHY -->
+  <section id="photography">
+    <div class="section-label">Analog Film Photography</div>
+    <h2 class="section-title">Featured Works</h2>
+    <p class="section-desc">
+      Landscape-focused analog photography. Collaborations with film brands, labs, manufacturers, and community features.
+    </p>
+    <div class="photo-grid">
+      <a href="https://www.instagram.com/p/DQZqfZLDDd2/" target="_blank" rel="noopener" class="photo-card">
+        <img src="assets/ig-1.jpg" alt="Analog film photograph" />
+        <div class="overlay"><span>View on Instagram</span></div>
+      </a>
+      <a href="https://www.instagram.com/p/DUrNGVXER5e/" target="_blank" rel="noopener" class="photo-card">
+        <img src="assets/ig-2.jpg" alt="Analog film photograph" />
+        <div class="overlay"><span>View on Instagram</span></div>
+      </a>
+      <a href="https://www.instagram.com/p/DUjbn_gktnE/" target="_blank" rel="noopener" class="photo-card">
+        <img src="assets/ig-3.jpg" alt="Analog film photograph" />
+        <div class="overlay"><span>View on Instagram</span></div>
+      </a>
+      <a href="https://www.instagram.com/p/DVZMnzHksO8/" target="_blank" rel="noopener" class="photo-card">
+        <img src="assets/ig-4.jpg" alt="Analog film photograph" />
+        <div class="overlay"><span>View on Instagram</span></div>
+      </a>
+    </div>
+    <p style="margin-top: 20px;">
+      <a href="https://www.instagram.com/pixel_xiong/" target="_blank" rel="noopener" style="color: var(--accent); font-weight: 600; text-decoration: none;">
+        More on Instagram &rarr;
+      </a>
+    </p>
 
-<section id="contact" style="margin-top:28px;">
-  <h2>Contact</h2>
-  <p>Email: peixiforwork at gmail dot com</p>
-</section>
+    <h3 class="section-title" style="font-size: 22px; margin-top: 48px;">Gear &amp; Process</h3>
+    <div class="gear-grid">
+      <div class="gear-card">
+        <h4>Cameras</h4>
+        <ul>
+          <li>Hasselblad 203FE</li>
+          <li>Pentax 67II</li>
+        </ul>
+      </div>
+      <div class="gear-card">
+        <h4>Film Stocks</h4>
+        <ul>
+          <li>Kodak</li>
+          <li>Fujifilm</li>
+          <li>Harman</li>
+          <li>Lomography</li>
+        </ul>
+      </div>
+      <div class="gear-card">
+        <h4>Self-Developed Film</h4>
+        <ul>
+          <li>C-41</li>
+          <li>E-6</li>
+          <li>ECN-2</li>
+        </ul>
+      </div>
+      <div class="gear-card">
+        <h4>Development &amp; Scanning</h4>
+        <ul>
+          <li>JOBO CPE-13</li>
+          <li>Epson V850 Pro</li>
+        </ul>
+      </div>
+    </div>
+  </section>
 
-<footer style="margin-top:40px; color:#666; font-size: 14px;">
-  <p>© Peixi Xiong</p>
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-label">Get in Touch</div>
+    <h2 class="section-title">Contact</h2>
+    <div class="contact-row" style="margin-top: 16px;">
+      <div class="contact-item">Email: <a href="mailto:peixiforwork@gmail.com">peixiforwork@gmail.com</a></div>
+      <div class="contact-item"><a href="https://scholar.google.com/citations?user=IbqmMp8AAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar</a></div>
+      <div class="contact-item"><a href="https://www.linkedin.com/in/peixi-xiong" target="_blank" rel="noopener">LinkedIn</a></div>
+      <div class="contact-item"><a href="https://www.instagram.com/pixel_xiong/" target="_blank" rel="noopener">Instagram</a></div>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <div class="container">&copy; 2026 Peixi Xiong</div>
 </footer>
+
+<script>
+function togglePubs() {
+  var el = document.getElementById('full-pubs');
+  var txt = document.getElementById('pub-toggle-text');
+  if (el.classList.contains('hidden')) {
+    el.classList.remove('hidden');
+    txt.textContent = 'Hide Full Publication List';
+  } else {
+    el.classList.add('hidden');
+    txt.textContent = 'Show Full Publication List';
+  }
+}
+</script>
 
 </body>
 </html>
