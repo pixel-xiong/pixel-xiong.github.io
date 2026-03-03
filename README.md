@@ -1,2 +1,2 @@
-# https-pixel-xiong.github.io
+# pixel-xiong.github.io
 Personal website and portfolio
